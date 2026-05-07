@@ -7,8 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "stock_alert",
-        uniqueConstraints = @UniqueConstraint(columnNames = "product_id"))
+@Table(name = "stock_alert")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,7 +22,7 @@ public class StockAlert {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "product_id", nullable = false, unique = true)
+    @Column(name = "product_id", nullable = false)
     private Long productId;
 
     @Column(name = "product_name", nullable = false, length = 100)
