@@ -1,0 +1,26 @@
+
+spring:
+  application:
+    name: "inventory-service"
+  datasource:
+    url: jdbc:h2:mem:stockflow_db
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: $t0ckfl0vv
+    hikari:
+      maximum-pool-size: 20 # suficiente para picos de carga media
+      minimum-idle: 5 # conexciones listas para el trafico inicial
+      connection-timeout: 30000 # 30 segundos para obtener conexion antes de fallar
+      idle-timeout: 600000 # tiempo en inactividad para cerrar una conexion sobrante 10 minutos
+  h2:
+    console:
+      enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: create-drop # crea tablas a partir de las entidades
+    defer-datasource-initialization: true # ejecuta data.sql DESPUÉS de Hibernate
+  sql:
+    init:
+      mode: always # siempre ejecuta data.sql al iniciar
+
+
