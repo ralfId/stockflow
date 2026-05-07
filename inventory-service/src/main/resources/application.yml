@@ -22,5 +22,27 @@ spring:
   sql:
     init:
       mode: always # siempre ejecuta data.sql al iniciar
-
-
+resilience4j.circuitbreaker:
+  instances:
+    alertService:
+      registerHealthIndicator: true
+      slidingWindowSize: 10
+      minimumNumberOfCalls: 5
+      permittedNumberOfCallsInHalfOpenState: 3
+      automaticTransitionFromOpenToHalfOpenEnabled: true
+      waitDurationInOpenState: 10s
+      failureRateThreshold: 50
+      eventConsumerBufferSize: 10
+resilience4j.retry:
+  instances:
+    movementRetry:
+      maxAttempts: 3
+      waitDuration: 1s
+      enableExponentialBackoff: true
+      exponentialBackoffMultiplier: 2
+resilience4j.ratelimiter:
+  instances:
+    historyRateLimiter:
+      limitForPeriod: 10
+      limitRefreshPeriod: 1s
+      timeoutDuration: 0s

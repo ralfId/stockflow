@@ -11,6 +11,7 @@ import com.stockflow.inventory_service.mapper.ProductMapper;
 import com.stockflow.inventory_service.mapper.StockAlertMapper;
 import com.stockflow.inventory_service.repository.ProductRepository;
 import com.stockflow.inventory_service.repository.StockAlertRepository;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,6 +19,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collections;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -30,11 +34,23 @@ public class StockAlertService {
     private final PagedMapper pagedMapper;
 
     @Transactional(readOnly = true)
+    @CircuitBreaker(name = "alertService", fallbackMethod = "alertsFallback")
     public PagedResponseDto<ProductResponseDto> getProductAlerts(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Product> productPage = productRepository.findLowStockProducts(pageable);
 
         return pagedMapper.toPagedResponseDto(productPage, productMapper::toResponseDto);
+    }
+
+    public PagedResponseDto<ProductResponseDto> alertsFallback(int page, int size, Throwable t) {
+        return PagedResponseDto.<ProductResponseDto>builder()
+                .content(Collections.emptyList())
+                .page(page)
+                .size(size)
+                .totalElements(0)
+                .totalPages(0)
+                .message("Servicio de alertas no disponible temporalmente.")
+                .build();
     }
 
     @Transactional(readOnly = true)

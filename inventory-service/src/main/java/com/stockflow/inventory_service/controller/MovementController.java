@@ -5,6 +5,7 @@ import com.stockflow.inventory_service.dto.MovementRequestDto;
 import com.stockflow.inventory_service.dto.MovementResponseDto;
 import com.stockflow.inventory_service.dto.PagedResponseDto;
 import com.stockflow.inventory_service.service.MovementService;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,7 @@ public class MovementController {
     }
 
     @GetMapping("/{productId}/history")
+    @RateLimiter(name = "historyRateLimiter")
     public ResponseEntity<ApiResponse<PagedResponseDto<MovementResponseDto>>> getHistoryByProductId(
             @PathVariable Long productId,
             @RequestParam(defaultValue = "0") int page,

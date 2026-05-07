@@ -11,6 +11,7 @@ import com.stockflow.inventory_service.mapper.MovementMapper;
 import com.stockflow.inventory_service.mapper.PagedMapper;
 import com.stockflow.inventory_service.repository.MovementRepository;
 import com.stockflow.inventory_service.repository.ProductRepository;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,6 +31,7 @@ public class MovementService {
     private final PagedMapper pagedMapper;
 
     @Transactional
+    @Retry(name = "movementRetry")
     public MovementResponseDto registerMovement(MovementRequestDto request) {
 
         Product product = productRepository.findById(request.getProductId())
