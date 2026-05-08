@@ -1,3 +1,23 @@
+info:
+  app:
+    name: "inventory-service"
+    description: "Servicio de gestion de inventario y alertas"
+    version: "1.0.0"
+
+management:
+  info:
+    # habilita la hinformacion en el endpoint /actuator/info
+    env:
+      enabled: true
+  endpoints:
+    web:
+      # endpoints solicitados
+      exposure:
+        include: "health,metrics,info"
+  endpoint:
+    health:
+      # permite ver los detalles personalizados en /health
+      show-details: always
 
 spring:
   application:
@@ -46,3 +66,4 @@ resilience4j.ratelimiter:
       limitForPeriod: 10
       limitRefreshPeriod: 1s
       timeoutDuration: 0s
+

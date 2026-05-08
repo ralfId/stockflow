@@ -12,4 +12,5 @@ import org.springframework.data.domain.Pageable;
 @Repository
 public interface StockAlertRepository extends JpaRepository<StockAlert, Long> {
     Optional<StockAlert> findByProductId(Long productId);
+    long countBySeverity(String severity);
 }
