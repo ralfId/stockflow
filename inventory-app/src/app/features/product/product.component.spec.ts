@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideNoopAnimations } from '@angular/platform-browser/animations';
 
 import { ProductComponent } from './product.component';
 
@@ -8,7 +9,8 @@ describe('ProductComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ProductComponent]
+      imports: [ProductComponent],
+      providers: [provideNoopAnimations()],
     });
     fixture = TestBed.createComponent(ProductComponent);
     component = fixture.componentInstance;
