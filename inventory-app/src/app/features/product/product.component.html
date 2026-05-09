@@ -1,1 +1,61 @@
-<p>product works!</p>
+
+<!-- Selector de categorias -->
+<label class="form-control w-full max-w-xs">
+  <div class="label">
+    <span class="label-text">Filtar por categoria</span>
+  </div>
+  <select class="select select-bordered">
+    <option selected>Todas</option>
+    <option>Categoria 1</option>
+    <option>Categoria 2</option>
+    <option>Categoria 4</option>
+    <option>Categoria 5</option>
+  </select>
+</label>
+
+<div class="border mt-5">
+  <table mat-table [dataSource]="datos">
+
+    <!-- Definición de Columnas -->
+    <ng-container matColumnDef="sku">
+      <th mat-header-cell *matHeaderCellDef> SKU </th>
+      <td mat-cell *matCellDef="let elemento"> {{elemento.sku}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> Nombre </th>
+      <td mat-cell *matCellDef="let elemento"> {{elemento.name}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="category">
+      <th mat-header-cell *matHeaderCellDef> Categoria </th>
+      <td mat-cell *matCellDef="let elemento"> {{elemento.category}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="currentStock">
+      <th mat-header-cell *matHeaderCellDef> Stock Actual </th>
+      <td mat-cell *matCellDef="let elemento"> {{elemento.currentStock}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="minStock">
+      <th mat-header-cell *matHeaderCellDef> Stock Minimo </th>
+      <td mat-cell *matCellDef="let elemento"> {{elemento.minStock}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="unitPrice">
+      <th mat-header-cell *matHeaderCellDef> Precio Unitario </th>
+      <td mat-cell *matCellDef="let elemento"> {{elemento.unitPrice}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="stockAlert">
+      <th mat-header-cell *matHeaderCellDef> Estado </th>
+      <td mat-cell *matCellDef="let elemento"> {{elemento.stockAlert}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+    <tr mat-row *matRowDef="let row; columns: columnas;"></tr>
+  </table>
+
+  <mat-paginator (page)="onTablePageChange($event)" [pageSizeOptions]="[1,5, 10, 20]" showFirstLastButtons></mat-paginator>
+</div>
+
