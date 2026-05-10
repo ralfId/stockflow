@@ -6,14 +6,14 @@ VALUES ('ELEC-001', 'Monitor 24" LED', 'Electrónicos', 25, 10, 189.99),
        ('ELEC-004', 'Cable HDMI 2m', 'Electrónicos', 40, 20, 12.99),
        ('ELEC-005', 'Base para laptop ajustable', 'Electrónicos', 3, 10, 45.00),
        ('ALIM-001', 'Café molido 500g', 'Alimentos', 30, 15, 8.75),
-       ('ALIM-002', 'Leche entera 1L', 'Alimentos', 5, 10, 1.20),
-       ('ALIM-003', 'Galletas integrales 200g', 'Alimentos', 0, 8, 2.99),
+       ('ALIM-002', 'Leche entera 1L', 'Alimentos', 10, 10, 1.20),
+       ('ALIM-003', 'Galletas integrales 200g', 'Alimentos', 8, 8, 2.99),
        ('ALIM-004', 'Aceite de oliva 750ml', 'Alimentos', 12, 6, 9.49),
        ('ROPA-001', 'Camiseta algodón unisex', 'Ropa', 50, 15, 14.99),
-       ('ROPA-002', 'Jeans slim fit', 'Ropa', 10, 12, 39.99),
+       ('ROPA-002', 'Jeans slim fit', 'Ropa', 12, 12, 39.99),
        ('ROPA-003', 'Chaqueta impermeable', 'Ropa', 0, 5, 89.95),
        ('HOG-001', 'Juego de sábanas matrim.', 'Hogar', 20, 10, 34.50),
-       ('HOG-002', 'Toalla de baño 100% algodón', 'Hogar', 4, 8, 19.95),
+       ('HOG-002', 'Toalla de baño 100% algodón', 'Hogar', 8, 8, 19.95),
        ('HOG-003', 'Vaso de cristal 6 uds.', 'Hogar', 15, 10, 22.00);
 
 INSERT INTO movement (product_id, type, quantity, reason, timestamp)
