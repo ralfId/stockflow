@@ -3,10 +3,10 @@ package com.stockflow.inventory_service.controller;
 import com.stockflow.inventory_service.dto.ApiResponse;
 import com.stockflow.inventory_service.dto.PagedResponseDto;
 import com.stockflow.inventory_service.dto.ProductResponseDto;
-import com.stockflow.inventory_service.dto.ProductSearchDto;
 import com.stockflow.inventory_service.service.ProductService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,13 +23,11 @@ public class ProductController {
 
     @GetMapping
     public ResponseEntity<ApiResponse<PagedResponseDto<ProductResponseDto>>> getProducts(
-            @Valid @RequestBody ProductSearchDto searchDto) {
+            @RequestParam(required = false) String category,
+            @RequestParam @NotNull  @Min(value = 0, message = "El número de página no puede ser negativo") Integer page,
+            @RequestParam @NotNull  @Min(value = 1, message = "El tamaño de página debe ser mayor a 0") Integer size) {
 
-        PagedResponseDto<ProductResponseDto> products = productService.getProducts(
-                searchDto.getCategory(),
-                searchDto.getPage(),
-                searchDto.getSize()
-        );
+        PagedResponseDto<ProductResponseDto> products = productService.getProducts(category,page, size);
         return new ResponseEntity<>(ApiResponse.success(products, HttpStatus.OK.value()), HttpStatus.OK);
     }
 
