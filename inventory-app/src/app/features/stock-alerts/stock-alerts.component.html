@@ -1,73 +1,73 @@
-<div class="flex flex-col gap-4">
+@defer (){
+  <div class="flex flex-col gap-4">
+    @for (item of listaALertas; track item.id) {
 
-  <div class="rounded-lg border border-red-500 bg-red-50 p-6 shadow-sm">
-    <div class="mb-4 flex items-center justify-between gap-4">
-      <span
-        class="me-2 rounded bg-primary-100 px-2.5 py-0.5 text-xs font-medium text-primary-800 dark:bg-primary-900 dark:text-primary-300">
-        CATEGORIA </span>
+    <div class="rounded-lg border p-6 shadow-sm transition-all" (click)="onSelectedAlert(item)"
+    [ngClass]="{
+            'border-red-500 bg-red-50': item.stockAlert === 'CRITICO',
+            'border-yellow-500 bg-yellow-50': item.stockAlert === 'BAJO',
+            'border-emerald-500 bg-emerald-50': item.stockAlert === 'OK'
+          }">
 
-      <div class="flex items-center justify-end gap-1">
-        <div class="stat-title text-red-500 font-extrabold">CRITICO</div>
+      <div class="mb-4 flex items-center justify-between gap-4">
+        <!-- Categoría -->
+        <span class="rounded bg-primary-100 px-2.5 py-0.5 text-xs font-medium text-primary-800 uppercase">
+          {{ item.category }}
+        </span>
 
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-          class="inline-block h-8 w-8 stroke-current">
-          <path class="text-red-500" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-        </svg>
-      </div>
-    </div>
-    <span class="text-lg font-semibold leading-tight text-gray-900 hover:underline dark:text-white">
-      Apple iMac 27", 1TB HDD, Retina 5K Display, M3 Max</span>
-    <ul class="mt-2 flex items-center gap-4">
-      <li class="flex items-center gap-2">
-        <span>En stock:</span>
-        <p class="text-sm font-medium text-gray-500 ">50</p>
-      </li>
-      <li class="flex items-center gap-2">
-        <span>Stock minimo:</span>
-        <p class="text-sm font-medium text-gray-500">50</p>
-      </li>
-      <li class="flex items-center gap-2">
-        <span>Precio unitario</span>
-        <p class="text-sm font-medium text-gray-500 ">$12.5</p>
-      </li>
-    </ul>
-  </div>
-
-  <div class="rounded-lg border border-yellow-500 bg-yellow-50 p-6 shadow-sm">
-    <div class="pt-6">
-      <div class="flex items-center justify-between gap-4">
-        <span
-          class="me-2 rounded bg-primary-100 px-2.5 py-0.5 text-xs font-medium text-primary-800 dark:bg-primary-900 dark:text-primary-300">
-          CATEGORIA </span>
-
+        <!-- Badge de Estado -->
         <div class="flex items-center justify-end gap-1">
-          <div class="stat-title text-yellow-500 font-extrabold">CRITICO</div>
+          <div class="stat-title font-extrabold uppercase" [ngClass]="{
+                  'text-red-500': item.stockAlert === 'CRITICO',
+                  'text-yellow-500': item.stockAlert === 'BAJO',
+                  'text-emerald-500': item.stockAlert === 'OK'
+                }">
+            {{ item.stockAlert }}
+          </div>
 
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-            class="inline-block h-8 w-8 stroke-current">
-            <path class="text-yellow-500" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            class="inline-block h-8 w-8 stroke-current" [ngClass]="{
+                  'text-red-500': item.stockAlert === 'CRITICO',
+                  'text-yellow-500': item.stockAlert === 'BAJO',
+                  'text-emerald-500': item.stockAlert === 'OK'
+                }">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
               d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
           </svg>
         </div>
       </div>
-      <span class="text-lg font-semibold leading-tight text-gray-900 hover:underline dark:text-white">
-        Apple iMac 27", 1TB HDD, Retina 5K Display, M3 Max</span>
-      <ul class="mt-2 flex items-center gap-4">
+
+      <!-- Nombre del Producto -->
+      <span class="text-lg font-semibold leading-tight text-gray-900 hover:underline">
+        {{ item.name }}
+      </span>
+
+      <!-- Datos Técnicos -->
+      <ul class="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2">
         <li class="flex items-center gap-2">
-          <span>En stock:</span>
-          <p class="text-sm font-medium text-gray-500 ">50</p>
+          <span class="text-sm text-gray-600">En stock:</span>
+          <p class="text-sm font-bold text-gray-900">{{ item.currentStock }}</p>
         </li>
         <li class="flex items-center gap-2">
-          <span>Stock minimo:</span>
-          <p class="text-sm font-medium text-gray-500 ">50</p>
+          <span class="text-sm text-gray-600">Stock mínimo:</span>
+          <p class="text-sm font-bold text-gray-900">{{ item.minStock }}</p>
         </li>
         <li class="flex items-center gap-2">
-          <span>Precio unitario</span>
-          <p class="text-sm font-medium text-gray-500 ">$12.5</p>
+          <span class="text-sm text-gray-600">Precio unitario:</span>
+          <p class="text-sm font-bold text-gray-900">{{ item.unitPrice | currency }}</p>
         </li>
       </ul>
     </div>
-  </div>
 
-</div>
+    } @empty {
+    <!-- Estado opcional si no hay alertas -->
+    <div class="p-10 text-center border-2 border-dashed rounded-lg">
+      <p class="text-gray-500">No hay alertas de inventario activas.</p>
+    </div>
+    }
+  </div>
+}
+
+@loading (after 100ms; minimum 1.5s) { <app-loader /> }
+@placeholder { <app-skeleton />}
+@error { <app-errorview /> }

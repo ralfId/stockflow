@@ -14,6 +14,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ProductService {
@@ -34,7 +38,14 @@ public class ProductService {
             productPage = productRepository.findAll(pageable);
         }
 
-        return pagedMapper.toPagedResponseDto(productPage, productMapper::toResponseDto);
+        List<Product> productList = productRepository.findAll();
+        BigDecimal totalInventarioValue = this.calculateInventoryValue(productList);
+
+        PagedResponseDto response = pagedMapper.toPagedResponseDto(productPage, productMapper::toResponseDto);
+        response.setMessage(totalInventarioValue.toString());
+
+        return response;
+
     }
 
     @Transactional(readOnly = true)
@@ -44,5 +55,12 @@ public class ProductService {
                 .orElseThrow(() -> new ProductNotFoundException("Producto con ID " + id + " no encontrado"));
 
         return productMapper.toResponseDto(product);
+    }
+
+    private BigDecimal calculateInventoryValue(List<Product> productList){
+        return productList.stream()
+                .map(product -> product.getUnitPrice()
+                        .multiply(BigDecimal.valueOf(product.getCurrentStock())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }

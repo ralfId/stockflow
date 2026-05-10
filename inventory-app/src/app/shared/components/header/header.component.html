@@ -24,7 +24,8 @@
       <div class="flex items-center">
         <a routerLink="/stock-alerts"
           class="indicator hidden sm:inline-flex ml-5 text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center items-center mr-3">
-          <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24" fill="none" stroke="#ffffff" class="svg-inline--fa fa-gem  h-6 w-8" >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#ffffff"
+            class="svg-inline--fa fa-gem  h-6 w-8">
 
             <g id="SVGRepo_bgCarrier" stroke-width="0" />
 
@@ -40,8 +41,11 @@
             </g>
 
           </svg>
-          <!-- <div class="badge badge-xs">0</div> -->
-           <span class="indicator-item badge badge-secondary">40</span>
+          @if(totalAlerts > 0){
+            <span class="indicator-item badge badge-secondary">
+              {{totalAlerts}}
+            </span>
+          }
         </a>
       </div>
     </div>

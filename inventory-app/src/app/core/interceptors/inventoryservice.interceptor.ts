@@ -42,25 +42,3 @@ export const InventoryServiceInterceptor: HttpInterceptorFn = (req, next) => {
   }
 
 }
-
-
-// {
-//     "headers": {
-//         "normalizedNames": {},
-//         "lazyUpdate": null,
-//         "headers": {}
-//     },
-//     "status": 500,
-//     "statusText": "Unknown Error",
-//     "url": "http://localhost:8080/api/v1/products?page=0&size=-5",
-//     "ok": false,
-//     "name": "HttpErrorResponse",
-//     "message": "Http failure response for http://localhost:8080/api/v1/products?page=0&size=-5: 500 ",
-//     "error": {
-//         "timestamp": "2026-05-10T03:06:40.198424Z",
-//         "status": 500,
-//         "error": "Internal Server Error",
-//         "message": "An unexpected error occurred: getProducts.size: El tamaño de página debe ser mayor a 0",
-//         "path": "/api/v1/products"
-//     }
-// }
