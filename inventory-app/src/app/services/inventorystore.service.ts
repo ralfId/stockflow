@@ -3,6 +3,8 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { ProductRequetst } from '../core/interfaces/product-request.interface';
 import { APIResponse, Pageable, Product, ProductAlert } from '../core/models';
 import { MovementHistory } from '../core/models/movement-history.model';
+import { MovementRequest } from '../core/interfaces/movement-request.interface';
+import { Observable, tap } from 'rxjs';
 
 // export interface Product {
 //   id: number;
@@ -108,13 +110,27 @@ export class InventoryStoreService {
   }
 
   loadProductMovementHistory(producID: number) {
-    this.sleep();
+    // this.sleep();
     this.httpClient.get<any>(`${this.baseUrl}/movements/${producID}/history`)
       .subscribe({
         next: (apiResp: APIResponse<MovementHistory>) => {
           this._productMovementHistorySignal.set((apiResp.data as unknown) as MovementHistory[]);
         }
       });
+  }
+
+  createMovement(movement: MovementRequest): Observable<any> {
+    return this.httpClient.post<APIResponse<MovementHistory>>(`${this.baseUrl}/movements`, movement)
+      .pipe(
+        tap(() => {
+          this.loadProductsAlerts();
+          this.loadPageableProducts({ category: '', page: 0, size: 10 });
+          const selected = this._selectedProductSignal();
+          if (selected) {
+            this.loadProductMovementHistory(selected.id);
+          }
+        })
+      );
   }
 
   sleep() {

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, effect, inject, OnInit, signal, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, effect, inject, signal, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
@@ -14,7 +14,7 @@ import { LoaderComponent, ErrorviewComponent, SkeletonComponent } from 'src/app/
   templateUrl: './product.component.html',
   styleUrls: ['./product.component.css']
 })
-export class ProductComponent implements OnInit {
+export class ProductComponent {
 
   private inventoryStoreService = inject(InventoryStoreService);
 
@@ -47,9 +47,9 @@ export class ProductComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-    this.inventoryStoreService.loadPageableProducts({ category: '', page: 0, size: 5 });
-  }
+  // ngOnInit(): void {
+  //   this.inventoryStoreService.loadPageableProducts({ category: '', page: 0, size: 5 });
+  // }
 
   onTablePageChange(event: PageEvent) {
     this.cargarProductos(this.selectedCategory(), event.pageIndex, event.pageSize);
