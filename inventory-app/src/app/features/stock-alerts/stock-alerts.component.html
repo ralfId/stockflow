@@ -1,0 +1,73 @@
+@defer (on idle; when listaALertas.length > 0){
+  <div class="flex flex-col gap-4">
+    @for (item of listaALertas; track item.id) {
+
+    <div class="rounded-lg border p-6 shadow-sm transition-all" (click)="onSelectedAlert(item)"
+    [ngClass]="{
+            'border-red-500 bg-red-50': item.stockAlert === 'CRITICO',
+            'border-yellow-500 bg-yellow-50': item.stockAlert === 'BAJO',
+            'border-emerald-500 bg-emerald-50': item.stockAlert === 'OK'
+          }">
+
+      <div class="mb-4 flex items-center justify-between gap-4">
+        <!-- Categoría -->
+        <span class="rounded bg-primary-100 px-2.5 py-0.5 text-xs font-medium text-primary-800 uppercase">
+          {{ item.category }}
+        </span>
+
+        <!-- Badge de Estado -->
+        <div class="flex items-center justify-end gap-1">
+          <div class="stat-title font-extrabold uppercase" [ngClass]="{
+                  'text-red-500': item.stockAlert === 'CRITICO',
+                  'text-yellow-500': item.stockAlert === 'BAJO',
+                  'text-emerald-500': item.stockAlert === 'OK'
+                }">
+            {{ item.stockAlert }}
+          </div>
+
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+            class="inline-block h-8 w-8 stroke-current" [ngClass]="{
+                  'text-red-500': item.stockAlert === 'CRITICO',
+                  'text-yellow-500': item.stockAlert === 'BAJO',
+                  'text-emerald-500': item.stockAlert === 'OK'
+                }">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Nombre del Producto -->
+      <span class="text-lg font-semibold leading-tight text-gray-900 hover:underline">
+        {{ item.name }}
+      </span>
+
+      <!-- Datos Técnicos -->
+      <ul class="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2">
+        <li class="flex items-center gap-2">
+          <span class="text-sm text-gray-600">En stock:</span>
+          <p class="text-sm font-bold text-gray-900">{{ item.currentStock }}</p>
+        </li>
+        <li class="flex items-center gap-2">
+          <span class="text-sm text-gray-600">Stock mínimo:</span>
+          <p class="text-sm font-bold text-gray-900">{{ item.minStock }}</p>
+        </li>
+        <li class="flex items-center gap-2">
+          <span class="text-sm text-gray-600">Precio unitario:</span>
+          <p class="text-sm font-bold text-gray-900">{{ item.unitPrice | currency }}</p>
+        </li>
+      </ul>
+    </div>
+
+    } @empty {
+    <!-- Estado opcional si no hay alertas -->
+    <div class="p-10 text-center border-2 border-dashed rounded-lg">
+      <p class="text-gray-500">No hay alertas de inventario activas.</p>
+    </div>
+    }
+  </div>
+}
+
+@loading (after 100ms; minimum 1.5s) { <app-loader /> }
+@placeholder { <app-skeleton />}
+@error { <app-errorview /> }

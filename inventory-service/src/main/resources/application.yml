@@ -1,0 +1,69 @@
+info:
+  app:
+    name: "inventory-service"
+    description: "Servicio de gestion de inventario y alertas"
+    version: "1.0.0"
+
+management:
+  info:
+    # habilita la hinformacion en el endpoint /actuator/info
+    env:
+      enabled: true
+  endpoints:
+    web:
+      # endpoints solicitados
+      exposure:
+        include: "health,metrics,info"
+  endpoint:
+    health:
+      # permite ver los detalles personalizados en /health
+      show-details: always
+
+spring:
+  application:
+    name: "inventory-service"
+  datasource:
+    url: jdbc:h2:mem:stockflow_db
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: $t0ckfl0vv
+    hikari:
+      maximum-pool-size: 20 # suficiente para picos de carga media
+      minimum-idle: 5 # conexciones listas para el trafico inicial
+      connection-timeout: 30000 # 30 segundos para obtener conexion antes de fallar
+      idle-timeout: 600000 # tiempo en inactividad para cerrar una conexion sobrante 10 minutos
+  h2:
+    console:
+      enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: create-drop # crea tablas a partir de las entidades
+    defer-datasource-initialization: true # ejecuta data.sql DESPUÉS de Hibernate
+  sql:
+    init:
+      mode: always # siempre ejecuta data.sql al iniciar
+resilience4j.circuitbreaker:
+  instances:
+    alertService:
+      registerHealthIndicator: true
+      slidingWindowSize: 10
+      minimumNumberOfCalls: 5
+      permittedNumberOfCallsInHalfOpenState: 3
+      automaticTransitionFromOpenToHalfOpenEnabled: true
+      waitDurationInOpenState: 10s
+      failureRateThreshold: 50
+      eventConsumerBufferSize: 10
+resilience4j.retry:
+  instances:
+    movementRetry:
+      maxAttempts: 3
+      waitDuration: 1s
+      enableExponentialBackoff: true
+      exponentialBackoffMultiplier: 2
+resilience4j.ratelimiter:
+  instances:
+    historyRateLimiter:
+      limitForPeriod: 10
+      limitRefreshPeriod: 1s
+      timeoutDuration: 0s
+
