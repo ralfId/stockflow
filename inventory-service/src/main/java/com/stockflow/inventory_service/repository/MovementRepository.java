@@ -7,7 +7,9 @@ import org.springframework.stereotype.Repository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 @Repository
 public interface MovementRepository extends JpaRepository<Movement, Long> {
-    Page<Movement> findByProductId(Long productId, Pageable pageable);
+    List<Movement> findByProductId(Long productId);
 }

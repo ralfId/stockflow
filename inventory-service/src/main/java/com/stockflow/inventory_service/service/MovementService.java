@@ -20,6 +20,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class MovementService {
@@ -74,18 +77,17 @@ public class MovementService {
     }
 
     @Transactional(readOnly = true)
-    public PagedResponseDto<MovementResponseDto> getProductMovementHistory(Long productId, int page, int size) {
+    public List<MovementResponseDto> getProductMovementHistory(Long productId) {
         if (!productRepository.existsById(productId)) {
             throw new ProductNotFoundException("Producto con ID " + productId + " no encontrado");
         }
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by("timestamp").descending());
-        Page<Movement> movementPage = movementRepository.findByProductId(productId, pageable);
+        List<Movement> movementHistory = movementRepository.findByProductId(productId);
 
-        if (movementPage.isEmpty()) {
+        if (movementHistory.isEmpty()) {
             throw new ProductNotFoundException("No se encontraron movimientos para el producto");
         }
 
-        return pagedMapper.toPagedResponseDto(movementPage, movementMapper::toResponseDto);
+        return movementHistory.stream().map(movementMapper::toResponseDto).collect(Collectors.toList());
     }
 }

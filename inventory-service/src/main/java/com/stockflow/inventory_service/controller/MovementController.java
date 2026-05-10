@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/movements")
 @RequiredArgsConstructor
@@ -29,12 +31,10 @@ public class MovementController {
 
     @GetMapping("/{productId}/history")
     @RateLimiter(name = "historyRateLimiter")
-    public ResponseEntity<ApiResponse<PagedResponseDto<MovementResponseDto>>> getHistoryByProductId(
-            @PathVariable Long productId,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+    public ResponseEntity<ApiResponse<List<MovementResponseDto>>> getHistoryByProductId(
+            @PathVariable Long productId) {
 
-        PagedResponseDto<MovementResponseDto> history = movementService.getProductMovementHistory(productId, page, size);
+        List<MovementResponseDto> history = movementService.getProductMovementHistory(productId);
         return new ResponseEntity<>(ApiResponse.success(history, HttpStatus.OK.value()), HttpStatus.OK);
     }
 }

@@ -18,6 +18,7 @@ public class MovementMapper {
                 .quantity(movement.getQuantity())
                 .reason(movement.getReason())
                 .timestamp(movement.getTimestamp())
+                .updatedStock(movement.getQuantity())
                 .build();
     }
 }
