@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, effect, inject, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, effect, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
@@ -24,7 +24,22 @@ export class ProductComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
+
+  selectedCategory = signal<string>(localStorage.getItem('selectedCategory') || 'Todas');
+
+  categorias = ['Todas', 'Electrónicos', 'Alimentos', 'Ropa', 'Hogar'];
+
   constructor() {
+
+    effect(() => {
+      const category = this.selectedCategory();
+
+      // guardar en LocalStorage
+      localStorage.setItem('selectedCategory', category);
+
+      this.cargarProductos(this.selectedCategory(), 0, 5);
+    });
+
     // sincronizar el contenido con el DataSource de la tabla
     effect(() => {
       const content = this.productsPage()?.content || [];
@@ -37,7 +52,22 @@ export class ProductComponent implements OnInit {
   }
 
   onTablePageChange(event: PageEvent) {
-    this.inventoryStoreService.loadPageableProducts({ category: '', page: event.pageIndex, size: event.pageSize });
+    this.cargarProductos(this.selectedCategory(), event.pageIndex, event.pageSize);
   }
-  
+
+  onCategoryChange(event: Event) {
+    const value = (event.target as HTMLSelectElement).value;
+    this.selectedCategory.set(value);
+  }
+
+  cargarProductos(category: string, page: number, size: number) {
+    const categoryParam = category === 'Todas' ? '' : category;
+
+    this.inventoryStoreService.loadPageableProducts({
+      category: categoryParam,
+      page: page,
+      size: size
+    });
+  }
+
 }

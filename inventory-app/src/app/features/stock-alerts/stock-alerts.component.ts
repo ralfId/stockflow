@@ -4,6 +4,7 @@ import { MatIconModule } from '@angular/material/icon'
 import { InventoryStoreService } from 'src/app/services/inventorystore.service';
 import { Product } from 'src/app/core/models';
 import { LoaderComponent, ErrorviewComponent, SkeletonComponent } from 'src/app/shared/components/loaders';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-stock-alerts',
@@ -17,6 +18,7 @@ import { LoaderComponent, ErrorviewComponent, SkeletonComponent } from 'src/app/
 export class StockAlertsComponent implements OnInit {
 
   private inventoryStoreService = inject(InventoryStoreService);
+  private router = inject(Router);
 
   listaALertas: Product[] = [];
   productAlert = this.inventoryStoreService.productAlertSignal;
@@ -34,5 +36,6 @@ export class StockAlertsComponent implements OnInit {
 
   onSelectedAlert(productAlert: Product){
       this.inventoryStoreService.loadProductByID(productAlert.id);
+      this.router.navigate(['/historial-movimientos']);
   }
 }

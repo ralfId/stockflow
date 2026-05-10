@@ -1,4 +1,4 @@
-@defer (){
+@defer (on idle; when listaALertas.length > 0){
   <div class="flex flex-col gap-4">
     @for (item of listaALertas; track item.id) {
 

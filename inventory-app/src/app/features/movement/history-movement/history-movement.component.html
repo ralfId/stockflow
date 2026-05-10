@@ -1,0 +1,41 @@
+
+
+@defer (when isHistoryLoaded()) {
+  <div class="overflow-x-auto">
+    <table class="table table-xs">
+      <thead>...</thead>
+      <tbody>
+        @for (movement of history(); track movement.id) {
+        <tr>
+          <td>{{ productName || 'N/A' }}</td>
+          <td>{{ productCategory || 'N/A' }}</td>
+          <td>{{ movement.updatedStock }}</td>
+          <td>
+            <span [class.text-success]="movement.type === 'IN'" [class.text-error]="movement.type === 'OUT'">
+              {{ movement.type === 'OUT' ? '-' : '+' }}{{ movement.quantity }}
+            </span>
+          </td>
+          <td>
+            <span class="badge" [class.badge-success]="movement.type === 'IN'"
+              [class.badge-error]="movement.type === 'OUT'">
+              {{ movement.type }}
+            </span>
+          </td>
+          <td>{{ movement.reason || 'Sin razón' }}</td>
+          <td>{{ movement.timestamp| date:'dd/MM/yyyy HH:mm' }}</td>
+        </tr>
+        } @empty {
+          <tr>
+            <td colspan="8" class="text-center">
+              <div class="alert alert-info">No hay movimientos</div>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}
+
+@loading (after 100ms; minimum 1.5s) { <app-loader /> }
+@placeholder { <app-skeleton />}
+@error { <app-errorview /> }

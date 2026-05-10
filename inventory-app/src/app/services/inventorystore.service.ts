@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { ProductRequetst } from '../core/interfaces/product-request.interface';
 import { APIResponse, Pageable, Product, ProductAlert } from '../core/models';
+import { MovementHistory } from '../core/models/movement-history.model';
 
 // export interface Product {
 //   id: number;
@@ -21,11 +22,13 @@ export class InventoryStoreService {
   private _productSignal = signal<Pageable<Product> | null>(null);
   private _productAlertSignal = signal<Pageable<Product> | null>(null);
   private _selectedProductSignal = signal<Product | null>(null);
+  private _productMovementHistorySignal = signal<MovementHistory[] | null>(null);
 
   // signal de productos de solo lectura
   public productsignal = this._productSignal.asReadonly();
   public productAlertSignal = this._productAlertSignal.asReadonly();
   public selectedProductSignal = this._selectedProductSignal.asReadonly();
+  public productMovementHistorySignal = this._productMovementHistorySignal.asReadonly();
 
   // propiedades derivadas (computed)
   public totalProducts = computed(() => (this.productsignal()?.totalElements || 0));
@@ -102,5 +105,23 @@ export class InventoryStoreService {
           this._selectedProductSignal.set(apiResp.data);
         }
       });
+  }
+
+  loadProductMovementHistory(producID: number) {
+    this.sleep();
+    this.httpClient.get<any>(`${this.baseUrl}/movements/${producID}/history`)
+      .subscribe({
+        next: (apiResp: APIResponse<MovementHistory>) => {
+          this._productMovementHistorySignal.set((apiResp.data as unknown) as MovementHistory[]);
+        }
+      });
+  }
+
+  sleep() {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(true);
+      }, 2500);
+    });
   }
 }

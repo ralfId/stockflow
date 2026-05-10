@@ -13,9 +13,14 @@ export const appRoutes: Routes = [
       import('../features/product/product.component').then((m) => m.ProductComponent),
   },
   {
-    path: 'movimientos',
+    path: 'registrar-movimientos',
     loadComponent: () =>
-      import('../features/movement/movement.component').then((m) => m.MovementComponent),
+      import('../features/movement/register-movement/movement.component').then((m) => m.MovementComponent),
+  },
+  {
+    path: 'historial-movimientos',
+    loadComponent: () =>
+      import('../features/movement/history-movement/history-movement.component').then((m) => m.HistoryMovementComponent),
   },
   {
     path: 'stock-alerts',
